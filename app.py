@@ -5,6 +5,7 @@ import uuid
 
 from fastapi.responses import StreamingResponse
 
+from src.inference import run_infra_model
 from src.agri2 import run_agri2
 from src.agri import run_agri_model
 
@@ -78,4 +79,8 @@ async def run_agri(pre: UploadFile = File(...), post: UploadFile = File(...)):
 async def run_infra(file: UploadFile = File(...)):
     f = await handle_file_upload(file)
     path = f.get("saved_to")
-    return f
+
+    return StreamingResponse(
+        run_infra_model(path),
+        media_type="application/json",
+    )

@@ -328,6 +328,14 @@ if __name__ == "__main__":
         print("Please ensure TIF files exist.")
 
 
+def remove(file_path):
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        print(f"{file_path} removed successfully.")
+    else:
+        print(f"{file_path} does not exist.")
+
+
 def run_agri2(pre_file, post_file, model):
     MY_MODEL_CHOICE = model
     if os.path.exists(pre_file):
@@ -337,7 +345,8 @@ def run_agri2(pre_file, post_file, model):
         analyzer = FloodAnalyzer(CONFIG, model_selection=MY_MODEL_CHOICE)
 
         result = analyzer.process_pair(pre_file, post_file)
-
+        remove(pre_file)
+        remove(post_file)
         yield (json.dumps(result) + "\n").encode("utf-8")
     else:
         print("Please ensure TIF files exist.")
